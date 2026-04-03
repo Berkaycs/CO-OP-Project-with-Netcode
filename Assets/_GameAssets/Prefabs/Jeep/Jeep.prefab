@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2661986115650501615}
   - component: {fileID: 6898917758135797150}
   - component: {fileID: 2765628818810720765}
+  - component: {fileID: 2793352597671506409}
   - component: {fileID: 5682441406391645456}
   - component: {fileID: -6852035274062151169}
   - component: {fileID: -407478753590767552}
@@ -104,6 +105,19 @@ MonoBehaviour:
   _wheelsSpinSpeed: 70
   _wheelYWhenSpringMin: 0.6
   _wheelYWhenSpringMax: 0.3
+--- !u!114 &2793352597671506409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734446863302934711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44a553def3d365748933a3cbfc460242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractionController
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &5682441406391645456
 MonoBehaviour:
   m_ObjectHideFlags: 0
