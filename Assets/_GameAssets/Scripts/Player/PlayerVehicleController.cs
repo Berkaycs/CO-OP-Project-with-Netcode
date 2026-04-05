@@ -60,6 +60,7 @@ public class PlayerVehicleController : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
+        if (GameManager.Instance.GetCurrentGameState() != GameState.Playing) return;
 
         SetSteerInput(Input.GetAxis("Horizontal"));
         SetAccelerationInput(Input.GetAxis("Vertical"));
@@ -68,7 +69,7 @@ public class PlayerVehicleController : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!IsOwner) return;
-        
+        if (GameManager.Instance.GetCurrentGameState() == GameState.GameOver) return;
         // SÜSPANSİYON
         UpdateSuspension();
         // STEERING - YER YÖN
