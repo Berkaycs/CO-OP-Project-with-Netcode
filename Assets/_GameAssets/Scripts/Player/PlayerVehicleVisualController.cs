@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
+using System.Collections;
 
 public class PlayerVehicleVisualController : NetworkBehaviour
 {
     [SerializeField] private PlayerVehicleController _playerVehicleController;
+    [SerializeField] private Collider _playerCollider;
+    [SerializeField] private Transform _vehicleVisualTransform;
     [SerializeField] private Transform _frontLeftWheel,_frontRightWheel,_backLeftWheel,_backRightWheel;
     [SerializeField] private float _wheelsSpinSpeed, _wheelYWhenSpringMin, _wheelYWhenSpringMax;
 
@@ -23,6 +26,18 @@ public class PlayerVehicleVisualController : NetworkBehaviour
         { WheelType.BackLeft, 0f },
         { WheelType.BackRight, 0f },
     };
+
+    override public void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+
+        _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
+    }
+
+    private void PlayerVehicleController_OnVehicleCrashed()
+    {
+        enabled = false;
+    }
 
     private void Start()
     {
@@ -94,5 +109,28 @@ public class PlayerVehicleVisualController : NetworkBehaviour
         _frontRightWheel.localPosition = new Vector3(_frontRightWheel.localPosition.x, _wheelYWhenSpringMin + (_wheelYWhenSpringMax - _wheelYWhenSpringMin) * springFrontRightRatio, _frontRightWheel.localPosition.z);
         _backLeftWheel.localPosition = new Vector3(_backLeftWheel.localPosition.x, _wheelYWhenSpringMin + (_wheelYWhenSpringMax - _wheelYWhenSpringMin) * springBackLeftRatio, _backLeftWheel.localPosition.z);
         _backRightWheel.localPosition = new Vector3(_backRightWheel.localPosition.x, _wheelYWhenSpringMin + (_wheelYWhenSpringMax - _wheelYWhenSpringMin) * springBackRightRatio, _backRightWheel.localPosition.z);
+    }
+
+    public void SetVehicleVisualActive(float delay)
+    {
+        StartCoroutine(SetVehicleVisualActiveCoroutine(delay));
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetVehicleVisualActiveRpc(bool isActive)
+    {
+        _vehicleVisualTransform.gameObject.SetActive(isActive);
+    }
+
+    private IEnumerator SetVehicleVisualActiveCoroutine(float delay)
+    {
+        SetVehicleVisualActiveRpc(false);
+        _playerCollider.enabled = false;
+
+        yield return new WaitForSeconds(delay);
+
+        SetVehicleVisualActiveRpc(true);
+        _playerCollider.enabled = true;
+        enabled = true;
     }
 }

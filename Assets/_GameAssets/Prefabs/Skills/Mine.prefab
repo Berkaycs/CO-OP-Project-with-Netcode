@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6651720722761446564}
   - component: {fileID: 4604829259963406418}
   - component: {fileID: 1214758418172991441}
+  - component: {fileID: 39179587948418269}
   - component: {fileID: 2475046155891640422}
   - component: {fileID: 1037449721894496656}
   m_Layer: 0
@@ -101,6 +102,20 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &39179587948418269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6277943623998450093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f814a28dad3040f45821cb44777071b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MineDamageable
+  ShowTopMostFoldoutHeaderGroup: 1
+  _mysteryBoxSkillsSO: {fileID: 11400000, guid: 3abd067fc1934f348adac66f9817c230, type: 2}
 --- !u!114 &2475046155891640422
 MonoBehaviour:
   m_ObjectHideFlags: 0

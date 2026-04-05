@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 8352801112084851737}
   - component: {fileID: 79488910150289371}
   - component: {fileID: 7022810363640988194}
+  - component: {fileID: -3454343827506827601}
   - component: {fileID: 3906179874801796573}
   m_Layer: 0
   m_Name: Spike
@@ -275,6 +276,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpikeController
   ShowTopMostFoldoutHeaderGroup: 1
   _spikeCollider: {fileID: 3906179874801796573}
+--- !u!114 &-3454343827506827601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540308399456552426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1615f3231c6a5f43acb9366c41a91e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpikeDamageable
+  ShowTopMostFoldoutHeaderGroup: 1
+  _mysteryBoxSkillsSO: {fileID: 11400000, guid: 63d14076de5297448afc73e1f0e96232, type: 2}
 --- !u!65 &3906179874801796573
 BoxCollider:
   m_ObjectHideFlags: 0

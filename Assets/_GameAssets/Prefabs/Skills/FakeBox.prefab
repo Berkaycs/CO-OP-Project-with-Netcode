@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 8474713495047302327}
   - component: {fileID: 1603280765561166861}
   - component: {fileID: -2215298905750384458}
+  - component: {fileID: 8720816882387898639}
   - component: {fileID: 1021499441084545138}
   m_Layer: 0
   m_Name: FakeBox
@@ -401,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1320484641
+  GlobalObjectIdHash: 36644494
   InScenePlacedSourceGlobalObjectIdHash: 36644494
   DeferredDespawnTick: 0
   Ownership: 8
@@ -459,6 +460,20 @@ MonoBehaviour:
   _fakeBoxCollider: {fileID: 1021499441084545138}
   _arrowTransform: {fileID: 3745855537439369088}
   _animationDuration: 0.5
+--- !u!114 &8720816882387898639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4959059089512682996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeeb62991d4a555409125a593192089d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FakeBoxDamageable
+  ShowTopMostFoldoutHeaderGroup: 1
+  _mysteryBoxSkillsSO: {fileID: 11400000, guid: 2c53e9c633f03494dab3a0c3d86c3247, type: 2}
 --- !u!65 &1021499441084545138
 BoxCollider:
   m_ObjectHideFlags: 0

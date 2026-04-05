@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 7077237356713602958}
   - component: {fileID: 6717427212341710819}
   - component: {fileID: 4218598974078535466}
+  - component: {fileID: -71670101357647950}
   - component: {fileID: 6154991233499274070}
   - component: {fileID: 121952436636455002}
   - component: {fileID: 6017394238703149472}
@@ -215,6 +216,20 @@ MonoBehaviour:
   _rocketCollider: {fileID: 6154991233499274070}
   _movementSpeed: 40
   _rotationSpeed: 300
+--- !u!114 &-71670101357647950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8734025167324392557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee3598c64e99e8947b52e2c90c6dccd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RocketDamageable
+  ShowTopMostFoldoutHeaderGroup: 1
+  _mysteryBoxSkillsSO: {fileID: 11400000, guid: b9877a13d0b647d48896ea04abda811c, type: 2}
 --- !u!65 &6154991233499274070
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -2,9 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Cysharp.Threading.Tasks;
+using System;
 
 public class PlayerVehicleController : NetworkBehaviour
 {
+    public event Action OnVehicleCrashed;
+
     public class SpringData
     {
         public float currentLength;
@@ -25,6 +28,10 @@ public class PlayerVehicleController : NetworkBehaviour
     [SerializeField] private VehicleSettingsSO _vehicleSettings;
     [SerializeField] private Rigidbody _vehicleRigidbody;
     [SerializeField] private BoxCollider _vehicleCollider;
+
+    [Header("Settings")]
+    [SerializeField] private float _crashForce;
+    [SerializeField] private float _crashTorque;
 
     private Dictionary<WheelType, SpringData> _springDatas;
 
@@ -321,6 +328,17 @@ public class PlayerVehicleController : NetworkBehaviour
             _vehicleRigidbody.isKinematic = false;
         }
     }
+
+    public void CrashVehicle()
+    {
+        OnVehicleCrashed?.Invoke();
+
+        _vehicleRigidbody.AddForce(Vector3.up * _crashForce, ForceMode.Impulse);
+        _vehicleRigidbody.AddTorque(Vector3.forward * _crashTorque, ForceMode.Impulse);
+        enabled = false;
+    }
+
+    public void OnPlayerRespawned() => enabled = true;
 }
 
 public static class SpringMathExtensions

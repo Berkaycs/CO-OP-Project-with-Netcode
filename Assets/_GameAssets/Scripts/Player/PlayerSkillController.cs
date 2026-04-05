@@ -8,6 +8,8 @@ public class PlayerSkillController : NetworkBehaviour
     public static event Action OnTimerFinished;
 
     [Header("References")]
+    [SerializeField] private PlayerVehicleController _playerVehicleController;
+    [SerializeField] private PlayerInteractionController _playerInteractionController;
     [SerializeField] private Transform _rocketLauncherTransform;
     [SerializeField] private Transform _rocketLaunchPointTransform;
 
@@ -21,6 +23,20 @@ public class PlayerSkillController : NetworkBehaviour
     private float _timer;
     private float _timerMax;
     private int _mineAmountCounter;
+
+    override public void OnNetworkSpawn()
+    {
+        _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
+    }
+
+    private void PlayerVehicleController_OnVehicleCrashed()
+    {
+        enabled = false;
+        SkillsUI.Instance.SetSkillToNone();
+        _hasSkillAlready = false;
+        _hasTimerStarted = false;
+        SetRocketLauncherActiveRpc(false);
+    }
 
     private void Update()
     {
@@ -43,6 +59,16 @@ public class PlayerSkillController : NetworkBehaviour
                 SkillsUI.Instance.SetSkillToNone();
                 _hasTimerStarted = false;
                 _hasSkillAlready = false;
+
+                if (_currentSkill.SkillType == SkillType.Shield)
+                {
+                    _playerInteractionController.SetShieldActive(false);
+                }
+
+                if (_currentSkill.SkillType == SkillType.Spike)
+                {
+                    _playerInteractionController.SetSpikeActive(false);
+                }
             }
         }
     }
@@ -82,6 +108,16 @@ public class PlayerSkillController : NetworkBehaviour
         if (_currentSkill.SkillType == SkillType.Rocket)
         {
             StartCoroutine(ResetRocketLauncher());
+        }
+
+        if (_currentSkill.SkillType == SkillType.Shield)
+        {
+            _playerInteractionController.SetShieldActive(true);
+        }
+
+        if (_currentSkill.SkillType == SkillType.Spike)
+        {
+            _playerInteractionController.SetSpikeActive(true);
         }
     }
 
@@ -130,4 +166,6 @@ public class PlayerSkillController : NetworkBehaviour
     {
         return _rocketLaunchPointTransform.position;
     }
+
+    public void OnPlayerRespawned() => enabled = true;
 }
