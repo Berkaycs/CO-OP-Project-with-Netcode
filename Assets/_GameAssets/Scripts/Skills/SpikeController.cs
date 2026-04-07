@@ -20,8 +20,9 @@ public class SpikeController : NetworkBehaviour
         PlayerSkillController.OnTimerFinished -= PlayerSkillController_OnTimerFinished;
     }
 
-    private void PlayerSkillController_OnTimerFinished()
+    private void PlayerSkillController_OnTimerFinished(ulong clientId)
     {
+        if (clientId != OwnerClientId) return;
         DestroyRpc();
     }
 

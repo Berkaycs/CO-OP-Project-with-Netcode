@@ -5,7 +5,7 @@ using System.Collections;
 
 public class PlayerSkillController : NetworkBehaviour
 {
-    public static event Action OnTimerFinished;
+    public static event Action<ulong> OnTimerFinished;
 
     [Header("References")]
     [SerializeField] private PlayerVehicleController _playerVehicleController;
@@ -57,7 +57,7 @@ public class PlayerSkillController : NetworkBehaviour
 
             if (_timer <= 0)
             {
-                OnTimerFinished?.Invoke();
+                OnTimerFinished?.Invoke(OwnerClientId);
                 SkillsUI.Instance.SetSkillToNone();
                 _hasTimerStarted = false;
                 _hasSkillAlready = false;
