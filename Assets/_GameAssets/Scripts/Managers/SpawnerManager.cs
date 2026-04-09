@@ -37,7 +37,19 @@ public class SpawnerManager : NetworkBehaviour
             _availableRespawnPointIndexList.Add(i);
         }
 
-        NetworkManager.OnClientConnectedCallback += SpawnPlayer;
+        //NetworkManager.OnClientConnectedCallback += SpawnPlayer; no need anymore
+
+        SpawnAllPlayers();
+    }
+
+    private void SpawnAllPlayers()
+    {
+        if (!IsServer) return;
+
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            SpawnPlayer(client.ClientId);
+        }
     }
 
     private void SpawnPlayer(ulong clientId)

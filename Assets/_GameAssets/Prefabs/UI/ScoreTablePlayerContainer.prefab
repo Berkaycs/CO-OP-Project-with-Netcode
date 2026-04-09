@@ -100,6 +100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1127128971638578232}
+  - component: {fileID: 3819054704977625899}
   - component: {fileID: 546309499211112605}
   - component: {fileID: 8683473581043074627}
   m_Layer: 5
@@ -131,6 +132,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 968, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3819054704977625899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986037499328332230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef93e9e85ea6bcc4e98c8f10fe638bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreTablePlayerUI
+  _playerNameText: {fileID: 3848445380843888137}
+  _rankText: {fileID: 3849982010634397861}
+  _killsText: {fileID: 2847002361654658717}
+  _ownerColor: {r: 0, g: 1, b: 0.016809225, a: 1}
+  _profileImage: {fileID: 6145438793476681217}
+  _profileSprites:
+  - {fileID: 21300000, guid: 1b43327dd0044ef4fac00b53d2c2f2f8, type: 3}
+  - {fileID: 21300000, guid: 11638ad241754aa42956c42037c958e6, type: 3}
+  - {fileID: 21300000, guid: 5db5057779df044498585583702dfd65, type: 3}
+  - {fileID: 21300000, guid: 06b07f112035ae4439673c743ab20052, type: 3}
 --- !u!222 &546309499211112605
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -704,7 +727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.94070315, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

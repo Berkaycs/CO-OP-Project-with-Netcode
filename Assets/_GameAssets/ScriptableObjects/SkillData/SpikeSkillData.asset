@@ -17,4 +17,4 @@ MonoBehaviour:
   _spawnAmountOrTimer: 7
   _shouldBeAttachedToParent: 1
   _respawnTimer: 5
-  _damageAmount: 100
+  _damageAmount: 25

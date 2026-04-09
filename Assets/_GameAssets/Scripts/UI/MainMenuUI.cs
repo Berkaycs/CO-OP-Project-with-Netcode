@@ -14,6 +14,7 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button _closeButton;
     [SerializeField] private RectTransform _lobbiesBGTransform;
     [SerializeField] private TMP_InputField _joinCodeInputField;
+    [SerializeField] private TMP_Text _welcomeText;
 
     [Header("Settings")]
     [SerializeField] private float _animationDuration;
@@ -24,6 +25,12 @@ public class MainMenuUI : MonoBehaviour
         _clientButton.onClick.AddListener(StartClient);
         _lobbiesButton.onClick.AddListener(ShowLobbies);
         _closeButton.onClick.AddListener(HideLobbies);
+    }
+
+    private void OnEnable()
+    {
+        var playerName = PlayerPrefs.GetString(Consts.PlayerData.PLAYER_NAME, string.Empty);
+        _welcomeText.text = $"welcome, <color=yellow>{playerName}</color>";
     }
 
     private void Start()

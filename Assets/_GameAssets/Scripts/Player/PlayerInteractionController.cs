@@ -1,15 +1,20 @@
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.Collections;
 
 public class PlayerInteractionController : NetworkBehaviour
 {
+    [SerializeField] private PlayerHealthController _playerHealthController;
+
     private PlayerSkillController _playerSkillController;
     private PlayerVehicleController _playerVehicleController;
+    private PlayerNetworkController _playerNetworkController;
 
     private bool _isVehicleCrashed;
     private bool _isShieldActive;
     private bool _isSpikeActive;
+    private bool _deathHandled;
 
     override public void OnNetworkSpawn()
     {
@@ -17,7 +22,7 @@ public class PlayerInteractionController : NetworkBehaviour
 
         _playerSkillController = GetComponent<PlayerSkillController>();
         _playerVehicleController = GetComponent<PlayerVehicleController>();
-
+        _playerNetworkController = GetComponent<PlayerNetworkController>();
         _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
     }
 
@@ -72,19 +77,32 @@ public class PlayerInteractionController : NetworkBehaviour
 
     private void CrashTheVehicle(IDamageable damageable)
     {
-        damageable.Damage(_playerVehicleController);
-        SetKillerUIRpc(damageable.GetKillerClientId(), 
-                        RpcTarget.Single(damageable.GetKillerClientId(), RpcTargetUse.Temp));
+        if (_deathHandled) return;
+        if (_playerHealthController.GetHealth() <= 0) return;
 
-        SpawnerManager.Instance.RespawnPlayer(damageable.GetRespawnTimer(), OwnerClientId);
+        var playerName = _playerNetworkController.PlayerName.Value;
+        damageable.Damage(_playerVehicleController, damageable.GetKillerName());
+
+        _playerHealthController.TakeDamage(damageable.GetDamageAmount());
+
+        if (_playerHealthController.GetHealth() <= 0)
+        {
+            _deathHandled = true;
+            KillScreenUI.Instance.SetSmashedUI(damageable.GetKillerName(), damageable.GetRespawnTimer());
+            SetKillerUIRpc(damageable.GetKillerClientId(), playerName.ToString(),
+                        RpcTarget.Single(damageable.GetKillerClientId() ,RpcTargetUse.Temp));
+
+            SpawnerManager.Instance.RespawnPlayer(damageable.GetRespawnTimer(), OwnerClientId);
+        }
     }
 
     [Rpc(SendTo.SpecifiedInParams)]
-    private void SetKillerUIRpc(ulong killerClientId, RpcParams rpcParams)
+    private void SetKillerUIRpc(ulong killerClientId, FixedString32Bytes playerName,RpcParams rpcParams)
     {
         if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var killerClient))
         {
-            KillScreenUI.Instance.SetSmashUI("Kyle");
+            KillScreenUI.Instance.SetSmashUI(playerName.ToString());
+            killerClient.PlayerObject.GetComponent<PlayerScoreController>().AddScore(1);
         }
     }
 
@@ -92,6 +110,8 @@ public class PlayerInteractionController : NetworkBehaviour
     {
         enabled = true;
         _isVehicleCrashed = false;
+        _deathHandled = false;
+        _playerHealthController.RestartHealth();
     }
 
     public void SetShieldActive(bool active) => _isShieldActive = active;

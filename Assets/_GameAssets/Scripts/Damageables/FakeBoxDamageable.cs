@@ -35,11 +35,14 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
         DestroyRpc();
     }
 
-    public void Damage(PlayerVehicleController playerVehicleController)
+    public void Damage(PlayerVehicleController playerVehicleController, string playerName)
     {
-        playerVehicleController.CrashVehicle();
-        KillScreenUI.Instance.SetSmashedUI("Kyle", _mysteryBoxSkillsSO.SkillData.RespawnTimer);
-        DestroyRpc();
+        PlayerHealthController health = playerVehicleController.GetComponent<PlayerHealthController>();
+        if (health.GetHealth() - GetDamageAmount() <= 0)
+        {
+            playerVehicleController.CrashVehicle();
+            DestroyRpc();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,5 +70,23 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     public ulong GetKillerClientId()
     {
         return OwnerClientId;
+    }
+
+    public int GetDamageAmount()
+    {
+        return _mysteryBoxSkillsSO.SkillData.DamageAmount;
+    }
+
+    public string GetKillerName()
+    {
+        ulong killerClientId = GetKillerClientId();
+
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var client))
+        {
+            string playerName = client.PlayerObject.GetComponent<PlayerNetworkController>().PlayerName.Value.ToString();
+            return playerName;
+        }
+
+        return string.Empty;
     }
 }

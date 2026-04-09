@@ -297,6 +297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8659786643551154503}
+  - component: {fileID: 3386453987344798810}
   m_Layer: 5
   m_Name: LeaderboardRankingContainer
   m_TagString: Untagged
@@ -327,6 +328,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3386453987344798810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403382220548345369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5503cf86937279d44a8000a4ae2fac86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LeaderboardRankingUI
+  _rankText: {fileID: 7774239783245427586}
+  _playerNameText: {fileID: 3260634145012042848}
+  _scoreText: {fileID: 2308455240875817760}
+  _ownerColor: {r: 1, g: 0.9120439, b: 0, a: 1}
+  _profileImage: {fileID: 1241163996666215255}
+  _profileSprites:
+  - {fileID: 21300000, guid: 1b43327dd0044ef4fac00b53d2c2f2f8, type: 3}
+  - {fileID: 21300000, guid: 11638ad241754aa42956c42037c958e6, type: 3}
+  - {fileID: 21300000, guid: 5db5057779df044498585583702dfd65, type: 3}
+  - {fileID: 21300000, guid: 06b07f112035ae4439673c743ab20052, type: 3}
 --- !u!1 &7251339603911052506
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerVehicleVisualController : NetworkBehaviour
 {
     [SerializeField] private PlayerVehicleController _playerVehicleController;
+    [SerializeField] private CharacterSelectVisual _characterSelectVisual;
     [SerializeField] private Collider _playerCollider;
     [SerializeField] private Transform _vehicleVisualTransform;
     [SerializeField] private Transform _frontLeftWheel,_frontRightWheel,_backLeftWheel,_backRightWheel;
@@ -46,6 +48,9 @@ public class PlayerVehicleVisualController : NetworkBehaviour
 
         _springRestLength = _playerVehicleController.VehicleSettings.SpringRestLength;
         _steerAngle = _playerVehicleController.VehicleSettings.SteerAngle;
+
+        PlayerDataSerializable playerData = MultiplayerGameManager.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        _characterSelectVisual.SetPlayerColor(MultiplayerGameManager.Instance.GetPlayerColor(playerData.ColorId));
     }
 
     private void Update()

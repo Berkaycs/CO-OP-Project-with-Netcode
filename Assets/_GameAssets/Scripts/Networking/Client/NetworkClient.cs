@@ -22,7 +22,7 @@ public class NetworkClient : IDisposable // we use IDisposable to clean up the r
         Disconnect();
     }
 
-    private void Disconnect()
+    public void Disconnect()
     {
         if (SceneManager.GetActiveScene().name != Consts.Scenes.MENU_SCENE)
         {
