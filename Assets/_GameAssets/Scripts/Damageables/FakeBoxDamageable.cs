@@ -5,6 +5,7 @@ using Unity.Netcode.Components;
 public class FakeBoxDamageable : NetworkBehaviour, IDamageable
 {
     [SerializeField] private MysteryBoxSkillsSO _mysteryBoxSkillsSO;
+    [SerializeField] private GameObject _explosionEffectPrefab;
 
     public override void OnNetworkSpawn()
     {
@@ -32,7 +33,7 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
 
     private void PlayerVehicleController_OnVehicleCrashed()
     {
-        DestroyRpc();
+        DestroyRpc(false);
     }
 
     public void Damage(PlayerVehicleController playerVehicleController, string playerName)
@@ -41,7 +42,7 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
         if (health.GetHealth() - GetDamageAmount() <= 0)
         {
             playerVehicleController.CrashVehicle();
-            DestroyRpc();
+            DestroyRpc(true);
         }
     }
 
@@ -49,15 +50,21 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     {
         if (other.gameObject.TryGetComponent(out ShieldController shieldController))
         {
-            DestroyRpc();
+            DestroyRpc(true);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void DestroyRpc()
+    private void DestroyRpc(bool isExploded)
     {
         if (IsServer)
         {
+            if (isExploded)
+            {
+                GameObject explosionEffect = Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
+                explosionEffect.GetComponent<NetworkObject>().Spawn();
+            }
+            
             Destroy(gameObject);
         }
     }

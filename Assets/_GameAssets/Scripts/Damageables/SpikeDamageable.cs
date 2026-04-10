@@ -4,6 +4,7 @@ using Unity.Netcode;
 public class SpikeDamageable : NetworkBehaviour, IDamageable
 {
     [SerializeField] private MysteryBoxSkillsSO _mysteryBoxSkillsSO;
+    [SerializeField] private GameObject _explosionEffectPrefab;
 
     public override void OnNetworkSpawn()
     {
@@ -40,6 +41,7 @@ public class SpikeDamageable : NetworkBehaviour, IDamageable
         if (health.GetHealth() - GetDamageAmount() <= 0)
         {
             playerVehicleController.CrashVehicle();
+            ExplosionParticleRpc(playerVehicleController.transform.position);
         }
     }
 
@@ -50,6 +52,15 @@ public class SpikeDamageable : NetworkBehaviour, IDamageable
         {
             Destroy(gameObject);
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void ExplosionParticleRpc(Vector3 vehiclePosition = default)
+    {
+        if (!IsServer) return;
+        
+        GameObject explosionParticle = Instantiate(_explosionEffectPrefab, vehiclePosition, Quaternion.identity);
+        explosionParticle.GetComponent<NetworkObject>().Spawn();
     }
 
     public int GetRespawnTimer()

@@ -1,0 +1,15 @@
+using UnityEngine;
+using Unity.Netcode;
+
+public class SelfDestroy : NetworkBehaviour
+{
+    [SerializeField] private float _destroyDuration;
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            Destroy(gameObject, _destroyDuration);
+        }
+    }
+}

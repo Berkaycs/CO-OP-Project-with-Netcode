@@ -290,6 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpikeDamageable
   ShowTopMostFoldoutHeaderGroup: 1
   _mysteryBoxSkillsSO: {fileID: 11400000, guid: 63d14076de5297448afc73e1f0e96232, type: 2}
+  _explosionEffectPrefab: {fileID: 6590583602548482222, guid: b7db1dfa0bcdf244d99d5ea9efbd5cb4, type: 3}
 --- !u!65 &3906179874801796573
 BoxCollider:
   m_ObjectHideFlags: 0

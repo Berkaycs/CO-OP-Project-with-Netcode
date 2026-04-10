@@ -4,6 +4,7 @@ using Unity.Netcode;
 public class RocketDamageable : NetworkBehaviour, IDamageable
 {
     [SerializeField] private MysteryBoxSkillsSO _mysteryBoxSkillsSO;
+    [SerializeField] private GameObject _explosionEffectPrefab;
 
     public override void OnNetworkSpawn()
     {
@@ -31,7 +32,7 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
 
     private void PlayerVehicleController_OnVehicleCrashed()
     {
-        DestroyRpc();
+        DestroyRpc(false);
     }
     
     public void Damage(PlayerVehicleController playerVehicleController, string playerName)
@@ -40,7 +41,7 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
         if (health.GetHealth() - GetDamageAmount() <= 0)
         {
             playerVehicleController.CrashVehicle();
-            DestroyRpc();
+            DestroyRpc(true, playerVehicleController.transform.position);
         }
     }
 
@@ -48,15 +49,21 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
     {
         if (other.gameObject.TryGetComponent(out ShieldController shieldController))
         {
-            DestroyRpc();
+            DestroyRpc(true, shieldController.transform.position);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void DestroyRpc()
+    private void DestroyRpc(bool isExploded, Vector3 vehiclePosition = default)
     {
         if (IsServer)
         {
+            if (isExploded)
+            {
+                GameObject explosionEffect = Instantiate(_explosionEffectPrefab, vehiclePosition, Quaternion.identity);
+                explosionEffect.GetComponent<NetworkObject>().Spawn();
+            }
+            
             Destroy(gameObject);
         }
     }

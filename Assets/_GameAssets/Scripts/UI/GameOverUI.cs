@@ -112,6 +112,6 @@ public class GameOverUI : MonoBehaviour
     private void SetWinnersName()
     {
         string winnerName = _leaderboardUI.GetWinnerName();
-        _winnerText.text = winnerName + "SMASHED Y'ALL!";
+        _winnerText.text = winnerName + " SMASHED Y'ALL!";
     }
 }
