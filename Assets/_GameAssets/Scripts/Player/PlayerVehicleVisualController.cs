@@ -56,7 +56,7 @@ public class PlayerVehicleVisualController : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        if (GameManager.Instance.GetCurrentGameState() != GameState.Playing) return;
+        if (!GameManager.IsGamePlaying()) return;
         
         UpdateVisualStates();
         UpdateWheelsRotation();

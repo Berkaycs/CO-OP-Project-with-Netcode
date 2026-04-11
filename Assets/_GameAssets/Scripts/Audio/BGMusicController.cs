@@ -43,12 +43,12 @@ public class BGMusicController : MonoBehaviour
         {
             if (_audioSource.clip == _bgMenuMusicClip && _audioSource.isPlaying)
             {
-                _audioSource.volume = 1f;
+                _audioSource.volume = .1f;
                 return;
             }
 
             _audioSource.clip = _bgMenuMusicClip;
-            _audioSource.volume = 1f;
+            _audioSource.volume = .1f;
             _audioSource.Play();
         }
     }

@@ -10,6 +10,11 @@ public class ProfileUI : MonoBehaviour
     [SerializeField] private Button _selectProfileButton;
     [SerializeField] private Image _selectedProfileImage;
 
+    [Header("Audios")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip[] _charactersSfx;
+
+
     private int _selectedProfileIndex;
 
     private void Awake()
@@ -75,6 +80,8 @@ public class ProfileUI : MonoBehaviour
             _selectedProfileIndex = _profileToggles.ToList().IndexOf(_profileToggles.FirstOrDefault(t => t.isOn));
 
             UpdateSelectedProfileImage(_selectedProfileIndex);
+
+            _audioSource.PlayOneShot(_charactersSfx[_selectedProfileIndex]);
 
             PlayerPrefs.SetInt(Consts.PlayerData.PROFILE_INDEX, _selectedProfileIndex);
             _bgSelectProfile.SetActive(false);

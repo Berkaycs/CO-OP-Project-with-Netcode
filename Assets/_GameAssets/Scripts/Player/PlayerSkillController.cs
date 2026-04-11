@@ -42,7 +42,7 @@ public class PlayerSkillController : NetworkBehaviour
     {
         if (!IsOwner) return;
         if (!_hasSkillAlready) return;
-        if (GameManager.Instance.GetCurrentGameState() != GameState.Playing) return;
+        if (!GameManager.IsGamePlaying()) return;
 
         if (Input.GetKeyDown(KeyCode.Space) && !_isSkillUsed)
         {

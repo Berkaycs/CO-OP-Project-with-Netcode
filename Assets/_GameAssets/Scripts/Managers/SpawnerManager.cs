@@ -78,7 +78,7 @@ public class SpawnerManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(respawnTimer);
 
-        if (GameManager.Instance.GetCurrentGameState() != GameState.Playing) { yield break; }
+        if (!GameManager.IsGamePlaying()) { yield break; }
 
         if (_respawnPointTransformList.Count == 0)
         {

@@ -80,4 +80,16 @@ public class GameManager : NetworkBehaviour
     {
         return _currentGameState;
     }
+
+    /// <summary>Ağ sahne senkronu sırasında Instance henüz yoksa false döner.</summary>
+    public static bool IsGamePlaying()
+    {
+        return Instance != null && Instance.GetCurrentGameState() == GameState.Playing;
+    }
+
+    /// <summary>GameManager yoksa veya oyun bittiyse araç fizik döngüsünü atla.</summary>
+    public static bool IsVehicleSimulationPaused()
+    {
+        return Instance == null || Instance.GetCurrentGameState() == GameState.GameOver;
+    }
 }

@@ -10,11 +10,13 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
+        if (NetworkManager.Singleton == null) return;
 
         if (NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client))
         {
             NetworkObject ownerNetworkObject = client.PlayerObject;
-            PlayerVehicleController playerVehicleController = ownerNetworkObject.GetComponent<PlayerVehicleController>();
+            if (ownerNetworkObject == null) return;
+            if (!ownerNetworkObject.TryGetComponent(out PlayerVehicleController playerVehicleController)) return;
             playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
         }
     }
@@ -22,11 +24,13 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
+        if (NetworkManager.Singleton == null) return;
 
         if (NetworkManager.Singleton.ConnectedClients.TryGetValue(OwnerClientId, out var client))
         {
             NetworkObject ownerNetworkObject = client.PlayerObject;
-            PlayerVehicleController playerVehicleController = ownerNetworkObject.GetComponent<PlayerVehicleController>();
+            if (ownerNetworkObject == null) return;
+            if (!ownerNetworkObject.TryGetComponent(out PlayerVehicleController playerVehicleController)) return;
             playerVehicleController.OnVehicleCrashed -= PlayerVehicleController_OnVehicleCrashed;
         }
     }
@@ -88,12 +92,17 @@ public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     {
         ulong killerClientId = GetKillerClientId();
 
-        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var client))
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var client))
         {
-            string playerName = client.PlayerObject.GetComponent<PlayerNetworkController>().PlayerName.Value.ToString();
-            return playerName;
+            return string.Empty;
         }
 
-        return string.Empty;
+        NetworkObject playerObject = client.PlayerObject;
+        if (playerObject == null || !playerObject.TryGetComponent(out PlayerNetworkController playerNetworkController))
+        {
+            return string.Empty;
+        }
+
+        return playerNetworkController.PlayerName.Value.ToString();
     }
 }
