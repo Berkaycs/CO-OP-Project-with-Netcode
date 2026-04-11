@@ -66,7 +66,11 @@ public class ClientGameManager : IDisposable
         byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
         NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
 
+        Debug.Log($"[ClientGameManager] Starting Netcode client (joinCode length={joinCode?.Length ?? 0}).");
         NetworkManager.Singleton.StartClient();
+        Debug.Log(
+            $"[ClientGameManager] StartClient() returned. IsClient={NetworkManager.Singleton.IsClient} " +
+            $"IsConnectedClient={NetworkManager.Singleton.IsConnectedClient}");
     }
 
     public void SetJoinCode(string joinCode)

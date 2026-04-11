@@ -108,7 +108,42 @@ public class CharacterSelectUI : MonoBehaviour
 
     private void OnStartButtonClicked()
     {
-        NetworkManager.Singleton.SceneManager.LoadScene(Consts.Scenes.GAME_SCENE, LoadSceneMode.Single);
+        NetworkManager nm = NetworkManager.Singleton;
+        if (nm == null)
+        {
+            Debug.LogError("[CharacterSelect] OnStartButtonClicked: NetworkManager.Singleton is null.");
+            return;
+        }
+
+        if (!nm.IsServer)
+        {
+            Debug.LogWarning(
+                "[CharacterSelect] OnStartButtonClicked ignored: caller is not server " +
+                $"(IsServer={nm.IsServer} IsClient={nm.IsClient} IsHost={nm.IsHost}).");
+            return;
+        }
+
+        if (nm.SceneManager == null)
+        {
+            Debug.LogError("[CharacterSelect] OnStartButtonClicked: SceneManager is null. Enable Scene Management on NetworkManager.");
+            return;
+        }
+
+        string activeScene = SceneManager.GetActiveScene().name;
+        int connected = nm.ConnectedClientsList.Count;
+        Debug.Log(
+            $"[CharacterSelect] Requesting networked load of '{Consts.Scenes.GAME_SCENE}' (Single). " +
+            $"activeScene={activeScene} connectedClients={connected} LocalClientId={nm.LocalClientId}");
+
+        SceneEventProgressStatus status = nm.SceneManager.LoadScene(Consts.Scenes.GAME_SCENE, LoadSceneMode.Single);
+        if (status != SceneEventProgressStatus.Started)
+        {
+            Debug.LogError($"[CharacterSelect] LoadScene did not start successfully. status={status}");
+        }
+        else
+        {
+            Debug.Log($"[CharacterSelect] LoadScene accepted by Netcode. status={status}");
+        }
     }
 
     private void SetPlayerReady()

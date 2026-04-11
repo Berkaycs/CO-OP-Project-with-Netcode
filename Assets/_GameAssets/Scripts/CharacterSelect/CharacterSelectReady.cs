@@ -63,6 +63,10 @@ public class CharacterSelectReady : NetworkBehaviour
 
         if (allPlayersReady)
         {
+            Debug.Log(
+                "[CharacterSelectReady] All connected players are ready. " +
+                $"connectedClients={NetworkManager.Singleton.ConnectedClientsList.Count} " +
+                $"sender={rpcParams.Receive.SenderClientId}");
             OnAllPlayersReady?.Invoke();
         }
     }

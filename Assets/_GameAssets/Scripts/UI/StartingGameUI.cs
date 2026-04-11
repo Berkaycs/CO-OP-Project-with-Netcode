@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Unity.Netcode;
 using TMPro;
 using DG.Tweening;
@@ -15,26 +16,30 @@ public class StartingGameUI : NetworkBehaviour
     [SerializeField] private TMP_Text _countdownText;
 
     [Header("Settings")]
-    [SerializeField] private float _animationDuration;
-    [SerializeField] private float _waitingDuration = 1f;
+    [SerializeField] private float _animationDuration = 0.5f;
 
+    [SerializeField]
     private NetworkVariable<int> _playersLoaded = new NetworkVariable<int>
-    (
-        0,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Owner
-    );
+            (0,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Owner);
+            
+    private WaitForSeconds _waitingSeconds = new WaitForSeconds(1f);
 
     private void Awake()
     {
         Instance = this;
     }
 
-    override public void OnNetworkSpawn()
+    public override void OnNetworkSpawn()
     {
+        Debug.Log(
+            $"[StartingGameUI] OnNetworkSpawn activeScene={SceneManager.GetActiveScene().name} " +
+            $"IsServer={IsServer} IsClient={IsClient} IsHost={IsHost} OwnerClientId={OwnerClientId}");
+
         if (IsClient)
         {
-            SetPlayerLoadedRpc();
+            SetPlayersLoadedRpc();
         }
 
         if (IsServer)
@@ -53,10 +58,10 @@ public class StartingGameUI : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    private void SetPlayerLoadedRpc()
+    private void SetPlayersLoadedRpc()
     {
         _playersLoaded.Value++;
-        Debug.Log($"Players loaded: {_playersLoaded.Value}");
+        Debug.Log("Client Scene Loaded. Total Loaded: " + _playersLoaded.Value);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -70,8 +75,9 @@ public class StartingGameUI : NetworkBehaviour
     {
         if (NetworkManager.Singleton.ConnectedClientsList.Count == 1)
         {
-            StartCoroutine(CountdownCoroutine());
+            Debug.Log("Single Player Connected");
             WaitingForPlayersUI.Instance.Hide();
+            StartCoroutine(CountdownCoroutine());
         }
     }
 
@@ -79,18 +85,20 @@ public class StartingGameUI : NetworkBehaviour
     {
         _countdownText.gameObject.SetActive(true);
 
-        for (int i = 3; i > 0; i--)
+        for (int i = 3; i > 0; --i)
         {
             _countdownText.text = i.ToString();
             AnimateText();
-            yield return new WaitForSeconds(_waitingDuration);
+            yield return _waitingSeconds;
         }
 
         GameManager.Instance.ChangeGameState(GameState.Playing);
-        _countdownText.text = "GO!";
-        yield return new WaitForSeconds(_waitingDuration);
 
-        _countdownText.transform.DOScale(0, _animationDuration / 2).SetEase(Ease.OutQuart).OnComplete(() =>
+        _countdownText.text = "GO!";
+        AnimateText();
+        yield return _waitingSeconds;
+
+        _countdownText.transform.DOScale(0f, _animationDuration / 2).SetEase(Ease.OutQuart).OnComplete(() =>
         {
             _countdownText.gameObject.SetActive(false);
         });
@@ -101,7 +109,7 @@ public class StartingGameUI : NetworkBehaviour
         _countdownText.transform.localScale = Vector3.zero;
         _countdownText.transform.localRotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(-30f, 30f));
 
-        _countdownText.transform.DOScale(1, _animationDuration).SetEase(Ease.OutBack);
+        _countdownText.transform.DOScale(1f, _animationDuration).SetEase(Ease.OutBack);
         _countdownText.transform.DORotate(Vector3.zero, _animationDuration).SetEase(Ease.OutBack);
     }
 }

@@ -94,7 +94,25 @@ public class HostGameManager : IDisposable
 
         NetworkManager.Singleton.StartHost();
 
-        NetworkManager.Singleton.SceneManager.LoadScene(Consts.Scenes.CHARACTER_SELECT_SCENE, LoadSceneMode.Single);
+        NetworkManager nm = NetworkManager.Singleton;
+        if (nm.SceneManager == null)
+        {
+            Debug.LogError("[HostGameManager] SceneManager is null after StartHost. Is scene management enabled?");
+            return;
+        }
+
+        SceneEventProgressStatus csStatus =
+            nm.SceneManager.LoadScene(Consts.Scenes.CHARACTER_SELECT_SCENE, LoadSceneMode.Single);
+        if (csStatus != SceneEventProgressStatus.Started)
+        {
+            Debug.LogError($"[HostGameManager] Character select LoadScene failed. status={csStatus}");
+        }
+        else
+        {
+            Debug.Log(
+                $"[HostGameManager] Host started, loading character select. scene={Consts.Scenes.CHARACTER_SELECT_SCENE} " +
+                $"status={csStatus} connectedClients={nm.ConnectedClientsList.Count}");
+        }
     }
 
     private IEnumerator HeartbeatLobby(float waitTimeSeconds)
